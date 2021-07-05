@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:clinicbookingapp/views/login/login.dart';
+import 'package:clinicbookingapp/views/google maps api/map.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'helpers/constants.dart';
-// import 'views/home/home.dart';
 
 final GlobalKey<NavigatorState> firstTabNavKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> secondTabNavKey = GlobalKey<NavigatorState>();
@@ -36,7 +35,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: new CupertinoApp(
-        home: LoginScreen(),
+        home: MapView(),
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           DefaultMaterialLocalizations.delegate,
           DefaultWidgetsLocalizations.delegate,

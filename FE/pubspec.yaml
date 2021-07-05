@@ -35,6 +35,9 @@ dependencies:
   fa_stepper: ^0.0.2
   fluttertoast: ^8.0.7
   flutter_rating_bar: ^4.0.0
+  google_maps_flutter: ^2.0.6
+  geolocator: ^7.0.3
+  geocoding: ^2.0.0
   
 dev_dependencies:
   flutter_test:
