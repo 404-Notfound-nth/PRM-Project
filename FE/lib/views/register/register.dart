@@ -2,6 +2,10 @@ import 'package:clinicbookingapp/helpers/constants.dart';
 import 'package:clinicbookingapp/views/global/background.dart';
 import 'package:clinicbookingapp/views/login/login.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+//import 'package:dio/dio.dart';
 
 //import 'package:profile/components/background.dart';
 //import 'package:profile/screens/login/login.dart';
@@ -14,10 +18,57 @@ class RegisterScreen extends State<Register> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
+  String error = "";
+  String success = "";
 
-  String url = "https://localhost:8080/api/account/register";
-  Future register() async {
-    try {} catch (e) {
+  void onSignInClicked() {
+    setState(() {
+      if (phoneController.text.isEmpty) {
+        error = "Số điện thoại không được trống !!!";
+      } else if (passwordController.text.isEmpty) {
+        error = "Mật khẩu không được trống !!!";
+      } else if (fullNameController.text.isEmpty) {
+        error = "Tên không được trống !!!";
+      } else {
+        register(phoneController.text, passwordController.text,
+            fullNameController.text);
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => HomePage(username: username.text,)),
+        // );
+      }
+    });
+  }
+
+  var url = "https://localhost:8080/api/account/register";
+  Future register(String phone, String password, String fullname) async {
+    try {
+      var Url = Uri.parse(url);
+      var response = await http.post(
+        Url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'phone': phone,
+          'password': password,
+          'fullname': fullname,
+        }),
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          phoneController.clear();
+          passwordController.clear();
+          fullNameController.clear();
+          // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => HomePage(username: username)), (route) => false);
+          success = "Đăng ký thành công";
+          // Navigator.push(
+          //     context, MaterialPageRoute(builder: (context) => Register()));
+        });
+      } else {
+        success = "Số điện thoại đã tồn tại";
+      }
+    } catch (e) {
       print(e.toString());
     }
   }
@@ -42,18 +93,48 @@ class RegisterScreen extends State<Register> {
                 Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.symmetric(horizontal: 40),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: phoneController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(labelText: "Số điện thoại"),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.topLeft,
+                  margin: const EdgeInsets.only(left: 38, top: 5),
+                  child: GestureDetector(
+                    onTap: () => {},
+                    child: Text(
+                      error,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
                   ),
                 ),
                 SizedBox(height: size.height * 0.03),
                 Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.symmetric(horizontal: 40),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: passwordController,
                     decoration: InputDecoration(labelText: "Mật khẩu"),
                     obscureText: true,
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.topLeft,
+                  margin: const EdgeInsets.only(left: 38, top: 5),
+                  child: GestureDetector(
+                    onTap: () => {},
+                    child: Text(
+                      error,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
                   ),
                 ),
                 SizedBox(height: size.height * 0.03),
@@ -63,8 +144,37 @@ class RegisterScreen extends State<Register> {
                     right: 35,
                     left: 35,
                   ),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: fullNameController,
                     decoration: InputDecoration(labelText: "Họ và tên"),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.topLeft,
+                  margin: const EdgeInsets.only(left: 38, top: 5),
+                  child: GestureDetector(
+                    onTap: () => {},
+                    child: Text(
+                      error,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(top: 20),
+                  child: GestureDetector(
+                    onTap: () => {},
+                    child: Text(
+                      success.isEmpty ? '' : success,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
                   ),
                 ),
                 SizedBox(height: size.height * 0.05),
@@ -72,7 +182,9 @@ class RegisterScreen extends State<Register> {
                   alignment: Alignment.centerRight,
                   margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                   child: RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      onSignInClicked();
+                    },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(80.0)),
                     textColor: Colors.white,

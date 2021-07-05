@@ -1,4 +1,6 @@
 import 'package:clinicbookingapp/views/detail/detail-clinic.dart';
+import 'package:clinicbookingapp/views/provider/Account.dart';
+import 'package:clinicbookingapp/views/provider/AccountProvider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clinicbookingapp/views/home/next-appointment-card.dart';
@@ -6,9 +8,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:clinicbookingapp/helpers/constants.dart';
 import 'package:clinicbookingapp/views/global/shared-component.dart';
-import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class Home extends StatefulWidget {
 class HomeScreen extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    Account account = Provider.of<Account>(context);
     return Scaffold(
       appBar: SharedComponent.shared.buildAppBar("Dental Clinic Booking"),
       body: buildBody(context),
@@ -205,6 +207,9 @@ class HomeScreen extends State<Home> {
   }
 
   Container buildBody(BuildContext context) {
+    var datetime = DateTime.now();
+
+    Account account = Provider.of<Account>(context);
     return Container(
       color: Colors.white,
       child: SingleChildScrollView(
@@ -217,7 +222,7 @@ class HomeScreen extends State<Home> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      "Thứ 6, ngày 21 tháng 5",
+                      DateFormat('dd/MM/yyyy').format(datetime),
                       style: TextStyle(color: Constants.PRIMARY_COLOR),
                     ),
                     SizedBox(

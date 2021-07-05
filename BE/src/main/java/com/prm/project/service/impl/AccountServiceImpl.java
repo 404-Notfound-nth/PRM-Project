@@ -1,9 +1,6 @@
 package com.prm.project.service.impl;
 
-import java.util.List;
-
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,9 +25,6 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public void registerAccount(AccountDTO accountDTO) {
 		// TODO Auto-generated method stub
-
-		Account entity = accountRepository.findById(accountDTO.getPhone()).get();
-		if (entity == null) {
 			accountDTO.setPhone(accountDTO.getPhone());
 			accountDTO.setPassword(bCryptPasswordEncoder.encode(accountDTO.getPassword()));
 			accountDTO.setEmail(accountDTO.getEmail());
@@ -39,21 +33,10 @@ public class AccountServiceImpl implements AccountService {
 			accountDTO.setStatus_id("ACTIVE");
 			accountDTO.setBirthday(accountDTO.getBirthday());
 
-			entity = modelMapper.map(accountDTO, Account.class);
+			Account entity = modelMapper.map(accountDTO, Account.class);
 			accountRepository.save(entity);
 		}
-
-	}
-
-	@Override
-	public List<AccountDTO> getListAccount(String phone) {
-		// TODO Auto-generated method stub
-		List<Account> listAccount = accountRepository.getListByPhone(phone);
-		List<AccountDTO> listAccountDTO = modelMapper.map(listAccount, new TypeToken<List<AccountDTO>>() {
-		}.getType());
-
-		return listAccountDTO;
-	}
+		
 
 	@Override
 	public void updateToken(String phone, String token) {
@@ -65,6 +48,14 @@ public class AccountServiceImpl implements AccountService {
 			accountRepository.save(entity);
 		}
 
+	}
+
+	@Override
+	public AccountDTO getAccount(String phone) {
+		// TODO Auto-generated method stub
+		Account account = accountRepository.findByPhone(phone);
+		AccountDTO accountDTO = modelMapper.map(account, AccountDTO.class);
+		return accountDTO;
 	}
 
 }

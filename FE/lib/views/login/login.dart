@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:clinicbookingapp/helpers/constants.dart';
 import 'package:clinicbookingapp/views/global/background.dart';
+import 'package:clinicbookingapp/views/provider/AccountProvider.dart';
 import 'package:clinicbookingapp/views/register/register.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:dio/dio.dart';
-import 'package:clinicbookingapp/views/home/home.dart';
+// import 'dart:async';
+// import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -16,27 +19,93 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
   String error = "";
 
-  String url = "https://localhost:8080/api/auth/login";
-  Future logIn() async {
-    try {
-      var res = await Dio().post(url,
-          options: Options(
-            headers: {"Content-Type": "application/json"},
-          ),
-          data: {
-            'phone': phoneController.text,
-            'password': passwordController.text
-          });
-      if (res.data.toString().length > 0) {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => Home()));
+  void onSignInClicked() {
+    setState(() {
+      if (phoneController.text.isEmpty && passwordController.text.isEmpty) {
+        error = "Số điện thoại và mật khẩu không được trống !!!";
+      } else if (phoneController.text.isEmpty ||
+          passwordController.text.isEmpty) {
+        error = "Số điện thoại hoặc mật khẩu không được trống !!!";
+      } else {
+        logIn(phoneController.text, passwordController.text);
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => HomePage(username: username.text,)),
+        // );
       }
-      // if (res.data.toString() == null) {
-      //   error = "Invalid phone or password";
-      // }
-    } catch (e) {
-      print(e.toString());
-      error = "Invalid phone or password";
-      print(error);
+    });
+  }
+
+  String url = "https://localhost:8080/api/auth/login";
+  // Future logIn(String phone, String password) async {
+  //   var jsonData = null;
+  //   try {
+  //     var res = await Dio().post(url,
+  //         options: Options(
+  //           headers: {"Content-Type": "application/json"},
+  //         ),
+  //         data: {'phone': phone, 'password': password});
+
+  //     if (res.statusCode == 200) {
+  //       jsonData = jsonDecode(res.data);
+  //       // print(jsonData['username']);
+  //       // print(jsonData);
+  //       setState(() {
+  //         // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => HomePage(username: username)), (route) => false);
+  //         Navigator.pushAndRemoveUntil(
+  //             context,
+  //             MaterialPageRoute(
+  //                 builder: (_) => AccountProvider(
+  //                       account: jsonData,
+  //                     )),
+  //             (route) => false);
+  //       });
+  //     } else {
+  //       setState(() {
+  //         error = "Sai tên đăng nhập hoặc tài khoản";
+  //       });
+  //     }
+  //     // if (res.data.toString() == null) {
+  //     //   error = "Invalid phone or password";
+  //     // }
+  //   } catch (e) {
+  //     print(e.toString());
+  //     // error = "Invalid phone or password";
+  //     print(error);
+  //   }
+  // }
+
+  void logIn(String phone, String password) async {
+    var jsonData = null;
+    var url = Uri.parse("https://localhost:8080/api/auth/login");
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'phone': phone,
+        'password': password,
+      }),
+    );
+    if (response.statusCode == 200) {
+      jsonData = jsonDecode(response.body);
+      // print(jsonData['username']);
+      // print(jsonData);
+      setState(() {
+        // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => HomePage(username: username)), (route) => false);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (_) => AccountProvider(
+                      account: jsonData,
+                    )),
+            (route) => false);
+      });
+    } else {
+      setState(() {
+        error = "Sai tên đăng nhập hoặc tài khoản";
+      });
     }
   }
 
@@ -110,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                 child: RaisedButton(
                   onPressed: () {
-                    logIn();
+                    onSignInClicked();
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(80.0)),

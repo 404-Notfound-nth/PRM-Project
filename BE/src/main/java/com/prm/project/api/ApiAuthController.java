@@ -57,8 +57,8 @@ public class ApiAuthController {
 			System.out.println("=============>>>>>.. token " + token);
 			//accountRepository.setTokenByPhone(token, phone);
 			accountService.updateToken(account.getPhone(), token);
-			List<AccountDTO> accountDTO = accountService.getListAccount(account.getPhone());
-			return new ResponseEntity<Object>( account, HttpStatus.OK);
+			AccountDTO accountDTO = accountService.getAccount(account.getPhone());
+			return new ResponseEntity<Object>( accountDTO, HttpStatus.OK);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
