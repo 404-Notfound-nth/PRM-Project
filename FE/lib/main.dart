@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:clinicbookingapp/views/login/login.dart';
-import 'package:clinicbookingapp/views/google maps api/map.dart';
+import 'package:clinicbookingapp/views/list dental/list_view_dental.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +35,12 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: new CupertinoApp(
-        home: MapView(),
+        home: //LoginScreen(),
+        DentalList(dental: [
+            new Dental('Nha khoa Tâm Như', '200/1 Nguyễn Trọng Tuyển', 5),
+          new Dental('nha khoa Kim', '211/41 Hoàng Văn Thụ', 5)
+          ],
+        ),
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           DefaultMaterialLocalizations.delegate,
           DefaultWidgetsLocalizations.delegate,
