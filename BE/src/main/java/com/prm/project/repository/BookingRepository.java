@@ -7,5 +7,5 @@ import com.prm.project.entity.Booking;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, String>{
-	
+	Booking findByAccountPhone(String phone);
 }

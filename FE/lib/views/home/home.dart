@@ -1,6 +1,7 @@
 import 'package:clinicbookingapp/views/detail/detail-clinic.dart';
 import 'package:clinicbookingapp/views/provider/Account.dart';
 import 'package:clinicbookingapp/views/provider/AccountProvider.dart';
+import 'package:clinicbookingapp/views/provider/DentalClinic.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clinicbookingapp/views/home/next-appointment-card.dart';
@@ -10,6 +11,8 @@ import 'package:clinicbookingapp/helpers/constants.dart';
 import 'package:clinicbookingapp/views/global/shared-component.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Home extends StatefulWidget {
   @override
@@ -17,6 +20,36 @@ class Home extends StatefulWidget {
 }
 
 class HomeScreen extends State<Home> {
+  List<Dentistry> listDentistry = [];
+
+  getListDentistry() async {
+    var url = Uri.parse('https://localhost:8080/api/dentistry');
+    try {
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        var dental = jsonDecode(response.body);
+        setState(() {
+          for (var u in dental) {
+            Dentistry dentistry = new Dentistry.fromJson(u);
+            listDentistry.add(dentistry);
+          }
+          for (var u in listDentistry) {
+            print(u.address);
+          }
+        });
+      }
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getListDentistry();
+  }
+
   @override
   Widget build(BuildContext context) {
     Account account = Provider.of<Account>(context);
@@ -229,7 +262,7 @@ class HomeScreen extends State<Home> {
                       height: 10,
                     ),
                     Text(
-                      "Chào! Huy",
+                      "Chào" + account.fullname,
                       style: TextStyle(fontSize: 32),
                     ),
                   ],
@@ -265,18 +298,35 @@ class HomeScreen extends State<Home> {
               // horizontal list
               Container(
                 height: 180,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    _createNewsCard(Constants.IMAGE_FOLDER_REF + "hop1.jpg",
-                        "Nha khoa Thủ Đức", context),
-                    _createNewsCard(Constants.IMAGE_FOLDER_REF + "hop2.jpg",
-                        "Nha khoa B", context),
-                    _createNewsCard(Constants.IMAGE_FOLDER_REF + "hop1.jpg",
-                        "Nha khoa C", context),
-                    _createNewsCard(Constants.IMAGE_FOLDER_REF + "hop2.jpg",
-                        "Nha khoa D", context),
-                  ],
+                width: 100,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    // return Container(
+                    //   child: Text('${listDentistry[index].address}'),
+                    // );
+                    // return Container(
+                    //   child: ListView(
+                    //     scrollDirection: Axis.horizontal,
+                    //     // children: <Widget>[
+                    //     //   _createNewsCard(
+                    //     //       Constants.IMAGE_FOLDER_REF + "hop2.jpg",
+                    //     //       "Nha khoa B",
+                    //     //       context),
+                    //     //   _createNewsCard(
+                    //     //       Constants.IMAGE_FOLDER_REF + "hop1.jpg",
+                    //     //       "Nha khoa C",
+                    //     //       context),
+                    //     //   _createNewsCard(
+                    //     //       Constants.IMAGE_FOLDER_REF + "hop2.jpg",
+                    //     //       "Nha khoa D",
+                    //     //       context),
+                    //     // ],
+                    //   ),
+                    // );
+                    return Card();
+                  },
+                  itemCount: listDentistry.length,
                 ),
               ),
 

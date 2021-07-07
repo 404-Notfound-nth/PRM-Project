@@ -2,8 +2,6 @@ package com.prm.project.dto;
 
 import java.io.Serializable;
 
-import com.prm.project.entity.Status;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,8 +22,14 @@ public class DoctorsDTO implements Serializable {
 
 	private String phone;
 
-	private String address;
+	private String dentistry_address;
 
-	private Status status;
+	private String email;
+
+	private String gender;
+
+	private String address_doctor;
+
+	private String status_id;
 
 }

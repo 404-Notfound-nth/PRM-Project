@@ -28,7 +28,7 @@ public class Service {
 	@Column(name = "id", columnDefinition = "uniqueidentifier")
 	private String id;
 	
-	@Column(name = "serviceName", columnDefinition = "nvarchar")
+	@Column(name = "serviceName", columnDefinition = "nvarchar(255)")
 	private String serviceName;
 	
 	@Column(name = "price")

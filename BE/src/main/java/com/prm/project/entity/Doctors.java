@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -33,12 +32,24 @@ public class Doctors {
 	@Column(name = "id", columnDefinition = "uniqueidentifier")
 	private String id;
 	
+	@Column(name = "doctorName", columnDefinition = "nvarchar(255)")
 	private String doctorName;
-	
-	@Pattern(regexp = "^[0-9]{10}$", message = "Phone is not format")
+
 	private String phone;
 	
-	private String address;
+	@Column(name = "dentistry_address", columnDefinition = "nvarchar(255)")
+	private String dentistry_address;
+	
+	@Column(name = "email", columnDefinition = "varchar(255)")
+	private String email;
+	
+	@Column(name = "gender", columnDefinition = "nvarchar(5)")
+	private String gender;
+	
+	@Column(name = "address_doctor", columnDefinition = "nvarchar(255)")
+	private String address_doctor;
+	
+	private String status_id;
 	
 	@ManyToOne
 	@JsonIgnore
@@ -47,6 +58,11 @@ public class Doctors {
 	
 	@OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<BookingDetails> bookingDetails;
+	
+	@ManyToOne
+	@JsonIgnore
+	@JoinColumn(name = "dentistry_address", insertable = false, updatable = false)
+	private Dentistry dentistry;
 	
 //	@OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //	private Set<Booking> booking;

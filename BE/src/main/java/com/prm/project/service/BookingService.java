@@ -1,5 +1,7 @@
 package com.prm.project.service;
 
+import java.util.List;
+
 import com.prm.project.dto.BookingDTO;
 
 public interface BookingService {
@@ -14,4 +16,6 @@ public interface BookingService {
 	void acceptCustomer(String phone);
 	
 	void denyCustomer(String phone);
+	
+	List<BookingDTO> getListBooking();
 }

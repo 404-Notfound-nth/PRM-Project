@@ -1,8 +1,10 @@
 package com.prm.project.service.impl;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,7 +81,7 @@ public class BookingServiceImpl implements BookingService{
 	@Override
 	public void acceptCustomer(String phone) {
 		// TODO Auto-generated method stub
-		Booking booking = bookingRepository.findById(phone).get();
+		Booking booking = bookingRepository.findByAccountPhone(phone);
 		if(booking != null) {
 			booking.setStatus_id(ACCEPT_STATUS);
 			bookingRepository.save(booking);
@@ -90,11 +92,21 @@ public class BookingServiceImpl implements BookingService{
 	@Override
 	public void denyCustomer(String phone) {
 		// TODO Auto-generated method stub
-		Booking booking = bookingRepository.findById(phone).get();
+		Booking booking = bookingRepository.findByAccountPhone(phone);
 		if(booking != null) {
 			booking.setStatus_id(DENY_STATUS);
 			bookingRepository.save(booking);
 		}
+	}
+
+
+	@Override
+	public List<BookingDTO> getListBooking() {
+		// TODO Auto-generated method stub
+		List<Booking> booking = bookingRepository.findAll();
+		List<BookingDTO> bookingDTO = modelMapper.map(booking, new TypeToken<List<Booking>>() {
+		}.getType());
+		return bookingDTO;
 	}
 
 

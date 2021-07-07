@@ -30,4 +30,12 @@ public class DoctorServiceImpl implements DoctorService{
 		return doctorDTO;
 	}
 
+	@Override
+	public List<DoctorsDTO> getAllListDoctor() {
+		// TODO Auto-generated method stub
+		List<Doctors> doctor =  doctorRepository.findAll();
+		List<DoctorsDTO> doctorDTO = modelmapper.map(doctor, new TypeToken<List<DoctorsDTO>>(){}.getType());
+		return doctorDTO;
+	}
+
 }

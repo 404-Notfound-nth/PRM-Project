@@ -9,6 +9,5 @@ import com.prm.project.entity.Doctors;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctors, String>{
-
 		List<Doctors> findByStatus(String status);
 }

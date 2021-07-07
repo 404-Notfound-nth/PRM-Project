@@ -101,7 +101,7 @@ class _MapViewState extends State<MapView> {
 
       setState(() {
         _currentAddress =
-        "${place.street}, ${place.administrativeArea}, ${place.country}";
+            "${place.street}, ${place.administrativeArea}, ${place.country}";
         startAddressController.text = _currentAddress;
         _startAddress = _currentAddress;
       });
@@ -115,7 +115,8 @@ class _MapViewState extends State<MapView> {
     try {
       // Retrieving placemarks from addresses
       List<Location> startPlacemark = await locationFromAddress(_startAddress);
-      List<Location> destinationPlacemark = await locationFromAddress(_destinationAddress);
+      List<Location> destinationPlacemark =
+          await locationFromAddress(_destinationAddress);
 
       // Storing latitude & longitude of start and destination location
       double startLatitude = startPlacemark[0].latitude;
@@ -130,7 +131,8 @@ class _MapViewState extends State<MapView> {
         'DESTINATION COORDINATES: ($destinationLatitude, $destinationLongitude)',
       );
 
-      double totalDistance = _coordinateDistance(startLatitude, startLongitude, destinationLatitude, destinationLongitude);
+      double totalDistance = _coordinateDistance(startLatitude, startLongitude,
+          destinationLatitude, destinationLongitude);
 
       setState(() {
         _placeDistance = totalDistance.toStringAsFixed(2);
@@ -155,7 +157,7 @@ class _MapViewState extends State<MapView> {
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _getCurrentLocation();
   }
@@ -304,39 +306,39 @@ class _MapViewState extends State<MapView> {
                           SizedBox(height: 5),
                           ElevatedButton(
                             onPressed: (_startAddress != '' &&
-                                _destinationAddress != '')
+                                    _destinationAddress != '')
                                 ? () async {
-                              startAddressFocusNode.unfocus();
-                              desrinationAddressFocusNode.unfocus();
-                              // setState(() {
-                              //   if (markers.isNotEmpty) {markers.clear();}
-                              //   if (polylines.isNotEmpty) {polylines.clear();}
-                              //   if (polylineCoordinates.isNotEmpty){
-                              //     polylineCoordinates.clear();
-                              //   _placeDistance = null;
-                              //   }
-                              // });
+                                    startAddressFocusNode.unfocus();
+                                    desrinationAddressFocusNode.unfocus();
+                                    // setState(() {
+                                    //   if (markers.isNotEmpty) {markers.clear();}
+                                    //   if (polylines.isNotEmpty) {polylines.clear();}
+                                    //   if (polylineCoordinates.isNotEmpty){
+                                    //     polylineCoordinates.clear();
+                                    //   _placeDistance = null;
+                                    //   }
+                                    // });
 
-                              _calculateDistance().then((isCalculated) {
-                                if (isCalculated) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Distance Calculated Sucessfully'),
-                                    ),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Error Calculating Distance'),
-                                    ),
-                                  );
-                                }
-                              });
-                            }
+                                    _calculateDistance().then((isCalculated) {
+                                      if (isCalculated) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                'Distance Calculated Sucessfully'),
+                                          ),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                'Error Calculating Distance'),
+                                          ),
+                                        );
+                                      }
+                                    });
+                                  }
                                 : null,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
