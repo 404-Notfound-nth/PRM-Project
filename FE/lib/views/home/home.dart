@@ -1,6 +1,7 @@
-import 'package:clinicbookingapp/views/detail/detail-clinic.dart';
+import 'dart:convert';
+
 import 'package:clinicbookingapp/views/provider/Account.dart';
-import 'package:clinicbookingapp/views/provider/AccountProvider.dart';
+import 'package:clinicbookingapp/views/list dental/list_view_dental.dart';
 import 'package:clinicbookingapp/views/provider/DentalClinic.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import 'package:clinicbookingapp/views/global/shared-component.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class Home extends StatefulWidget {
   @override
@@ -21,13 +21,26 @@ class Home extends StatefulWidget {
 
 class HomeScreen extends State<Home> {
   List<Dentistry> listDentistry = [];
+  List<Map<String, dynamic>> listDentail = [
+    {
+      'name': 'Nha Khoa Tâm Như',
+      'address': '200/1 Nguyễn Trọng Tuyển',
+      'rating': 5,
+    },
+    {
+      'name': 'Nha Khoa Kim',
+      'address': '211/41 Hoàng Văn Thụ',
+      'rating': 5,
+    }
+  ];
 
   getListDentistry() async {
     var url = Uri.parse('https://localhost:8080/api/dentistry');
     try {
-      var response = await http.get(url);
+      var response =
+          await http.get(url, headers: {'Content-Type': 'application/json'});
       if (response.statusCode == 200) {
-        var dental = jsonDecode(response.body);
+        var dental = json.decode(utf8.decode(response.bodyBytes));
         setState(() {
           for (var u in dental) {
             Dentistry dentistry = new Dentistry.fromJson(u);
@@ -45,7 +58,6 @@ class HomeScreen extends State<Home> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getListDentistry();
   }
@@ -100,152 +112,14 @@ class HomeScreen extends State<Home> {
     );
   }
 
-  Widget _createHotServiceCard(String imageRef, String title, String nameClinic,
-      String description, double rating, String price, BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(10.0),
-        color: Colors.white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: new BorderRadius.all(const Radius.circular(12)),
-                ),
-                width: 160.0,
-                child: Image.asset(Constants.IMAGE_FOLDER_REF + imageRef),
-              ),
-            ),
-            SizedBox(
-              height: 8.0,
-            ),
-            Column(
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 8.0,
-                ),
-                Text(
-                  'Tại ' + nameClinic,
-                  style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 8.0,
-            ),
-            Text(description),
-            SizedBox(
-              height: 8.0,
-            ),
-            Text('Giá: ' + price + ' VND'),
-            SizedBox(
-              height: 8.0,
-            ),
-            _buildRatingBar(rating),
-            SizedBox(
-              height: 8.0,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _createNewsCard(String imageRef, String title, BuildContext context,
-      {List<String> discountTagStrings}) {
-//    class Clinic{
-//    String name;
-//    String phone;
-//    String email;
-//    String image;
-//    String address;
-//    String description;
-//    double totalRating;
-//    Clinic(this.image, this.name, this.phone, this.email, this.description, this.address, this.totalRating);
-//    }
-    if (discountTagStrings == null) {
-      discountTagStrings = [];
-    }
-    var sampleClinic = new Clinic(
-        "hop1.jpg",
-        title,
-        "1234-5678",
-        "clinic@gmail.com",
-        "Phòng khám dược trang bị cơ sở vật chất hiện đại, cùng với đội ngũ nhân viên có tay nghề cao luôn sẵn sàng phục vụ quý khách",
-        "123 Phạm Văn Đồng, phường TCH, quận Thủ Đức",
-        4.0);
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DetailClinicScreen(sampleClinic)),
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: new BorderRadius.all(const Radius.circular(12)),
-                  color: Colors.transparent,
-                ),
-                width: 160.0,
-                child: Image.asset(imageRef),
-              ),
-            ),
-            SizedBox(
-              height: 8.0,
-            ),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 17.0,
-              ),
-            ),
-            SizedBox(
-              height: 2.0,
-            ),
-            Text(
-              "Khoảng cách: 3.5 km",
-              style: TextStyle(color: Constants.GRAY),
-            ),
-            _buildRatingBar(4.0),
-            // ignore: unused_local_variable
-            for (var i in discountTagStrings)
-              Text(
-                i.toString(),
-                style: TextStyle(
-                    fontSize: 12.5, backgroundColor: Color(0xffffdfca)),
-              ),
-//            Text("Trám răng từ 400.000đ\nchỉ còn 350.000đ", style: TextStyle(fontSize: 12.5, backgroundColor: Color(0xffffdfca)),)
-          ],
-        ),
-      ),
-    );
-  }
-
   Container buildBody(BuildContext context) {
     var datetime = DateTime.now();
-
+    Size size = MediaQuery.of(context).size;
     Account account = Provider.of<Account>(context);
     return Container(
       color: Colors.white,
       child: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.only(top: 12.0),
           child: Column(
@@ -262,7 +136,7 @@ class HomeScreen extends State<Home> {
                       height: 10,
                     ),
                     Text(
-                      "Chào" + account.fullname,
+                      "Chào " + account.fullname,
                       style: TextStyle(fontSize: 32),
                     ),
                   ],
@@ -273,368 +147,27 @@ class HomeScreen extends State<Home> {
 
               // your next appointment
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Container(
                 margin: EdgeInsets.only(left: 10, right: 10),
                 child: NextAppointmentCard(),
               ),
-
-              SizedBox(
-                height: 40,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 12.0),
-                child: Text(
-                  "Nha Khoa Gần Đây",
-                  style: TextStyle(fontSize: 24),
-                ),
-              ),
               SizedBox(
                 height: 10,
               ),
-              //2
-              // news session
-              // horizontal list
-              Container(
-                height: 180,
-                width: 100,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    // return Container(
-                    //   child: Text('${listDentistry[index].address}'),
-                    // );
-                    // return Container(
-                    //   child: ListView(
-                    //     scrollDirection: Axis.horizontal,
-                    //     // children: <Widget>[
-                    //     //   _createNewsCard(
-                    //     //       Constants.IMAGE_FOLDER_REF + "hop2.jpg",
-                    //     //       "Nha khoa B",
-                    //     //       context),
-                    //     //   _createNewsCard(
-                    //     //       Constants.IMAGE_FOLDER_REF + "hop1.jpg",
-                    //     //       "Nha khoa C",
-                    //     //       context),
-                    //     //   _createNewsCard(
-                    //     //       Constants.IMAGE_FOLDER_REF + "hop2.jpg",
-                    //     //       "Nha khoa D",
-                    //     //       context),
-                    //     // ],
-                    //   ),
-                    // );
-                    return Card();
-                  },
-                  itemCount: listDentistry.length,
-                ),
+              ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (_, index) {
+                  Dental dental = Dental(
+                      listDentistry[index].name,
+                      listDentistry[index].address,
+                      listDentistry[index].rating);
+                  return DentalItem(dental);
+                },
+                itemCount: listDentistry.length,
               ),
 
-              SizedBox(
-                height: 20,
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(left: 12.0),
-                child: Text(
-                  "Ưu đãi",
-                  style: TextStyle(fontSize: 24),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              //2
-              // news session
-              // horizontal list
-              Container(
-                constraints: BoxConstraints(maxHeight: double.infinity),
-                height: 220,
-                child: ListView(
-//                    shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    _createNewsCard(
-                      Constants.IMAGE_FOLDER_REF + "hop3.jpg",
-                      "Nha khoa Ngân Hà",
-                      context,
-                      discountTagStrings: [
-                        "Tẩy răng từ 200.000đ\nchỉ còn 150.000đ"
-                      ],
-                    ),
-                    _createNewsCard(
-                      Constants.IMAGE_FOLDER_REF + "hop4.jpg",
-                      "Nha khoa Vĩnh Phúc",
-                      context,
-                      discountTagStrings: [
-                        "Cạo vôi răng từ 400.000đ\nchỉ còn 350.000đ"
-                      ],
-                    ),
-                    _createNewsCard(
-                      Constants.IMAGE_FOLDER_REF + "hop3.jpg",
-                      "Nha khoa C",
-                      context,
-                      discountTagStrings: [
-                        "Trám răng từ 400.000đ\nchỉ còn 350.000đ"
-                      ],
-                    ),
-                    _createNewsCard(
-                      Constants.IMAGE_FOLDER_REF + "hop4.jpg",
-                      "Nha khoa D",
-                      context,
-                      discountTagStrings: [
-                        "Cạo vôi răng từ 400.000đ\nchỉ còn 350.000đ"
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-//              SizedBox(
-//                height: 50,
-//              ),
-//
-//              Padding(
-//                padding: const EdgeInsets.only(left: 12.0),
-//                child: Text(
-//                  "Ưu Đãi",
-//                  style: TextStyle(fontSize: 24),
-//                ),
-//              ),
-//              SizedBox(
-//                height: 10,
-//              ),
-//              //3
-//              // discount session
-//              // horizontal list
-//              Container(
-//                height: 130.0,
-//                child: ListView(
-//                  scrollDirection: Axis.horizontal,
-//                  children: <Widget>[
-//                    // discount card 1
-//                    DiscountCard(
-//                      [
-//                        Color(0xFF2E3862),
-//                        Color(0xFF572A37),
-//                      ],
-//                      Column(
-//                        children: [
-//                          Row(
-//                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                            crossAxisAlignment: CrossAxisAlignment.start,
-//                            children: [
-//                              Padding(
-//                                padding: const EdgeInsets.all(8.0),
-//                                child: Text("300.000",
-//                                    style: TextStyle(
-//                                        decoration: TextDecoration.lineThrough,
-//                                        color: Colors.white,
-//                                        fontSize: 22.0)),
-//                              ),
-//                              Padding(
-//                                padding: const EdgeInsets.all(4.0),
-//                                child: Text("12/7/2021",
-//                                    style: TextStyle(
-//                                        color: Colors.white, fontSize: 12.0)),
-//                              ),
-//                            ],
-//                          ),
-//                          Row(
-//                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                            crossAxisAlignment: CrossAxisAlignment.start,
-//                            children: [
-//                              Padding(
-//                                padding:
-//                                    const EdgeInsets.only(left: 12.0, top: 8.0),
-//                                child: Text("Dịch vụ \ntrám răng\nchỉ còn",
-//                                    style: TextStyle(
-//                                        color: Colors.white, fontSize: 14.0)),
-//                              ),
-//                              Padding(
-//                                padding: const EdgeInsets.only(
-//                                    top: 12.0, right: 8.0),
-//                                child: Text("250.000",
-//                                    style: TextStyle(
-//                                        color: Colors.white, fontSize: 24.0)),
-//                              )
-//                            ],
-//                          ),
-//                          Padding(
-//                            padding: EdgeInsets.all(6.0),
-//                            child: Text('Nha khoa Vinh Sơn',
-//                                style: TextStyle(
-//                                    color: Colors.white, fontSize: 15.0)),
-//                          ),
-//                        ],
-//                      ),
-//                    ),
-//                    // discount card 2
-//                    DiscountCard(
-//                      [
-//                        Color(0xFF8E54E9),
-//                        Color(0xFF4776E6),
-//                      ],
-//                      Column(
-//                        children: [
-//                          Row(
-//                            mainAxisAlignment: MainAxisAlignment.start,
-//                            crossAxisAlignment: CrossAxisAlignment.start,
-//                            children: [
-//                              Padding(
-//                                padding:
-//                                    const EdgeInsets.only(left: 8.0, top: 18.0),
-//                                child: Text("Giảm",
-//                                    style: TextStyle(
-//                                        color: Colors.white, fontSize: 18.0)),
-//                              ),
-//                              Padding(
-//                                padding:
-//                                    const EdgeInsets.only(left: 0.0, top: 32.0),
-//                                child: Text("10%",
-//                                    style: TextStyle(
-//                                        color: Colors.white, fontSize: 38.0)),
-//                              ),
-//                              Padding(
-//                                padding:
-//                                    const EdgeInsets.only(left: 0.0, top: 36.0),
-//                                child: Text(
-//                                    " tất cả\n dịch vụ\n thứ 2\n hàng tuần",
-//                                    style: TextStyle(
-//                                        color: Colors.white, fontSize: 12.0)),
-//                              )
-//                            ],
-//                          ),
-//                          Padding(
-//                            padding: EdgeInsets.all(6.0),
-//                            child: Text('Nha khoa Kim',
-//                                style: TextStyle(
-//                                    color: Colors.white, fontSize: 15.0)),
-//                          ),
-//                        ],
-//                      ),
-//                    ),
-//
-//                    // discount card 3
-//                    DiscountCard(
-//                      [
-//                        Color(0xFF344173),
-//                        Color(0xFF4A7E79),
-//                      ],
-//                      Column(
-//                        children: [
-//                          Row(
-//                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                            crossAxisAlignment: CrossAxisAlignment.start,
-//                            children: [
-//                              Padding(
-//                                padding: const EdgeInsets.all(8.0),
-//                                child: Text("400.000",
-//                                    style: TextStyle(
-//                                        decoration: TextDecoration.lineThrough,
-//                                        color: Colors.white,
-//                                        fontSize: 22.0)),
-//                              ),
-//                              Padding(
-//                                padding: const EdgeInsets.all(4.0),
-//                                child: Text("12/7/2021",
-//                                    style: TextStyle(
-//                                        color: Colors.white, fontSize: 12.0)),
-//                              )
-//                            ],
-//                          ),
-//                          Row(
-//                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                            crossAxisAlignment: CrossAxisAlignment.start,
-//                            children: [
-//                              Padding(
-//                                padding:
-//                                    const EdgeInsets.only(left: 12.0, top: 8.0),
-//                                child: Text("Dịch vụ \ncạo vôi răng\nchỉ còn",
-//                                    style: TextStyle(
-//                                        color: Colors.white, fontSize: 14.0)),
-//                              ),
-//                              Padding(
-//                                padding: const EdgeInsets.only(
-//                                    top: 12.0, right: 8.0),
-//                                child: Text("350.000",
-//                                    style: TextStyle(
-//                                        color: Colors.white, fontSize: 24.0)),
-//                              )
-//                            ],
-//                          ),
-//                          Padding(
-//                            padding: EdgeInsets.all(6.0),
-//                            child: Text('Nha khoa Nam Á',
-//                                style: TextStyle(
-//                                    color: Colors.white, fontSize: 15.0)),
-//                          ),
-//                        ],
-//                      ),
-//                    ),
-//
-////                  _createNewsCard(Constants.IMAGE_FOLDER_REF + "dis1.png", "Giam gia lan dau"),
-////                  _createNewsCard(Constants.IMAGE_FOLDER_REF + "dis2.png", "Giam gia thu 2"),
-////                  _createNewsCard(Constants.IMAGE_FOLDER_REF + "dis1.png", "giam gia"),
-////                  _createNewsCard(Constants.IMAGE_FOLDER_REF + "dis2.png", "giam gia"),
-//                  ],
-//                ),
-//              ),
-              SizedBox(
-                height: 50,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 12.0),
-                child: Text(
-                  "Dịch vụ nổi bật",
-                  style: TextStyle(fontSize: 24),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 220,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: <Widget>[
-                    _createHotServiceCard(
-                        'cay-ghep-implant.jpg',
-                        'CẤY GHÉP IMPLANT',
-                        'nha khoa Đại Nam',
-                        'Giải pháp tối ưu cho người mất răng',
-                        4,
-                        '11.750.000',
-                        context),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    _createHotServiceCard(
-                        'khoaThammi.jpg',
-                        'Răng sứ thẩm mĩ',
-                        'nha khoa Vĩnh Sơn',
-                        'Biến nụ cười bạn trở nên tỏa sáng',
-                        4,
-                        '1.500.000',
-                        context),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    _createHotServiceCard(
-                        'niengrang.jpg',
-                        'Niềng răng dây sắt',
-                        'nha khoa Nam Á',
-                        'Giải phát tối ưu khắc phụ khuyết điểm',
-                        4,
-                        '20.000.000',
-                        context),
-                    SizedBox(
-                      width: 10,
-                    ),
-                  ],
-                ),
-              ),
-              // bottom box
               SizedBox(
                 height: 80,
               ),

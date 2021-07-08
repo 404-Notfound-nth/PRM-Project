@@ -27,7 +27,10 @@ class DentalItem extends StatefulWidget {
 
 class _DentalItemSate extends State<DentalItem> {
   final Dental dental;
-  _DentalItemSate(this.dental);
+  String address;
+  _DentalItemSate(this.dental) {
+    address = dental.addressDental;
+  }
 
   Position _currentPosition;
   String _currentAddress = '';
@@ -36,7 +39,6 @@ class _DentalItemSate extends State<DentalItem> {
   String _placeDistance;
 
   bool isVisi = false;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -66,7 +68,7 @@ class _DentalItemSate extends State<DentalItem> {
             Text(
               dental.nameDental,
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -265,7 +267,13 @@ class _DentalItemSate extends State<DentalItem> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    asyncMethod();
+    print(address);
+  }
+
+  void asyncMethod() async {
+    await _getCurrentLocation();
+    await calculateDistance(address);
   }
 }
 
@@ -284,27 +292,30 @@ class _DentalListState extends State<DentalList> {
     return Scaffold(
       appBar: searchBar.build(context),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      child: Column(
-                        children: widget.dental.map((Dental dental) {
-                          return new DentalItem(dental);
-                        }).toList(),
+        child: Container(
+          height: Size.infinite.height,
+          child: Column(
+            children: [
+              Container(
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        child: Column(
+                          children: widget.dental.map((Dental dental) {
+                            return new DentalItem(dental);
+                          }).toList(),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
-                  ],
+                      SizedBox(
+                        height: 50,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -321,7 +332,7 @@ class _DentalListState extends State<DentalList> {
     searchBar = new SearchBar(
         setState: setState,
         buildDefaultAppBar: buildAppBar,
-        inBar: false,
+        inBar: true,
         onSubmitted: print);
   }
 }
