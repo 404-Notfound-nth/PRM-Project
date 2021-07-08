@@ -24,7 +24,6 @@ class DentalItem extends StatefulWidget{
 
   @override
   _DentalItemSate createState() => _DentalItemSate(dental);
-
 }
 
 class _DentalItemSate extends State<DentalItem>{
@@ -251,6 +250,8 @@ class _DentalItemSate extends State<DentalItem>{
   void initState(){
     super.initState();
     _getCurrentLocation();
+    calculateDistance(dental.addressDental);
+    print(_placeDistance);
   }
 }
 
@@ -302,7 +303,7 @@ class _DentalListState extends State<DentalList> {
   
   _DentalListState(){
     searchBar = new
-        SearchBar(setState: setState, buildDefaultAppBar: buildAppBar,  inBar: false, onSubmitted: print);
+        SearchBar(setState: setState, buildDefaultAppBar: buildAppBar,  inBar: true, onSubmitted: print);
   }
 }
 

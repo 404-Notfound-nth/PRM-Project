@@ -25,9 +25,9 @@ class _MainTabBarState extends State<MainTabBar> {
 //          BottomNavigationBarItem(
 //            icon: Icon(Icons.calendar_today),
 //          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-          ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.search),
+//           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.more_horiz),
           ),
@@ -42,10 +42,12 @@ class _MainTabBarState extends State<MainTabBar> {
         } else if (index == 1) {
           return CupertinoTabView(
             navigatorKey: secondTabNavKey,
-            builder: (BuildContext context) => DentalList(dental: [
-              new Dental('Nha khoa Tâm Như', '200/1 Nguyễn Trọng Tuyển', 5),
-              new Dental('nha khoa Kim', '211/41 Hoàng Văn Thụ', 5),
-            ],),
+            builder: (BuildContext context) => ProfilePage(),
+            // navigatorKey: secondTabNavKey,
+            // builder: (BuildContext context) => DentalList(dental: [
+            //   new Dental('Nha khoa Tâm Như', '200/1 Nguyễn Trọng Tuyển', 5),
+            //   new Dental('nha khoa Kim', '211/41 Hoàng Văn Thụ', 5),
+            // ],),
           );
           //return CupertinoTabView(navigatorKey: secondTabNavKey, builder: (BuildContext context) => SchedulePage(),);
 //          return CupertinoTabView(

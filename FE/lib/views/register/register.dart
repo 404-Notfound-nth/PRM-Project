@@ -89,7 +89,7 @@ class RegisterScreen extends State<Register> {
                 Background(
                   title: "ĐĂNG KÍ",
                 ),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: 10),
                 Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.symmetric(horizontal: 40),
@@ -113,7 +113,7 @@ class RegisterScreen extends State<Register> {
                     ),
                   ),
                 ),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: 10),
                 Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.symmetric(horizontal: 40),
@@ -137,7 +137,7 @@ class RegisterScreen extends State<Register> {
                     ),
                   ),
                 ),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: 10),
                 Container(
                   alignment: Alignment.center,
                   margin: const EdgeInsets.only(
@@ -177,7 +177,7 @@ class RegisterScreen extends State<Register> {
                     ),
                   ),
                 ),
-                SizedBox(height: size.height * 0.05),
+                SizedBox(height: 10),
                 Container(
                   alignment: Alignment.centerRight,
                   margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
@@ -228,7 +228,7 @@ class RegisterScreen extends State<Register> {
                           color: Color(0xFF2661FA)),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

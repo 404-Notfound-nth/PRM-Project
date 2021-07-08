@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:clinicbookingapp/views/login/login.dart';
 import 'package:clinicbookingapp/views/list dental/list_view_dental.dart';
+import 'package:clinicbookingapp/views/global/main-tab-bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
       ),
       home: new CupertinoApp(
         home: LoginScreen(),
+        //MainTabBar(),
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           DefaultMaterialLocalizations.delegate,
           DefaultWidgetsLocalizations.delegate,
