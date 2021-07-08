@@ -14,6 +14,8 @@ class Dental{
   String addressDental;
   double rating;
   Dental(this.nameDental, this.addressDental, this.rating);
+
+  String get address => addressDental;
 }
 
 //Create Item Dental
@@ -28,7 +30,10 @@ class DentalItem extends StatefulWidget{
 
 class _DentalItemSate extends State<DentalItem>{
   final Dental dental;
-  _DentalItemSate(this.dental);
+  String address;
+  _DentalItemSate(this.dental){
+   address = this.dental.addressDental;
+  }
 
   Position _currentPosition;
   String _currentAddress = '';
@@ -82,45 +87,8 @@ class _DentalItemSate extends State<DentalItem>{
               SizedBox(height: 4,),
               Container(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    RaisedButton(
-                      onPressed: () {
-                        calculateDistance(dental.addressDental).then((isCalculate){
-                          if(isCalculate == true) {setState(() {
-                            isVisi = true;
-                          });} else {
-                            setState(() {
-                              isVisi = false;
-                            });
-                          }
-                        });
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(80.0)),
-                      textColor: Colors.white,
-                      padding: const EdgeInsets.all(0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 40.0,
-                        width: size.width*0.4,
-                        decoration: new BoxDecoration(
-                          //color: Colors.blue,
-                            borderRadius: BorderRadius.circular(80.0),
-                            gradient: new LinearGradient(colors: [
-                              Constants.PRIMARY_COLOR,
-                              Constants.HEAVY_BLUE
-                              // Color.fromARGB(255, 255, 136, 34),
-                              // Color.fromARGB(255, 255, 177, 41)
-                            ])),
-                        padding: const EdgeInsets.all(0),
-                        child: Text(
-                          "Hiện khoảng cách",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
                     RaisedButton(
                       onPressed: () {
                         Navigator.push(
@@ -193,9 +161,13 @@ class _DentalItemSate extends State<DentalItem>{
       double destinationLatitude = destinationPlacemark[0].latitude;
       double destinationLongitude = destinationPlacemark[0].longitude;
 
+      print(startPlacemark.toString());
+      print(destinationPlacemark.toString());
       String totalDistance = _coordinateDistance(startLatitude, startLongitude, destinationLatitude, destinationLongitude).toStringAsFixed(2);
+      print(totalDistance);
       setState(() {
         _placeDistance = totalDistance;
+        print(_placeDistance);
       });
       return true;
     } catch (e) {
@@ -249,11 +221,16 @@ class _DentalItemSate extends State<DentalItem>{
   @override
   void initState(){
     super.initState();
-    _getCurrentLocation();
-    calculateDistance(dental.addressDental);
-    print(_placeDistance);
+    asyncMethod();
+    print(address);
+  }
+
+  void asyncMethod() async {
+    await _getCurrentLocation();
+    await calculateDistance(address);
   }
 }
+
 
 class DentalList extends StatefulWidget{
   DentalList({Key key, this.dental}) : super(key: key);
