@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.prm.project.dto.BookingDTO;
 import com.prm.project.dto.DoctorsDTO;
+import com.prm.project.dto.RateDTO;
 import com.prm.project.entity.Booking;
 import com.prm.project.entity.Service;
 import com.prm.project.repository.BookingRepository;
 import com.prm.project.repository.ServiceRepository;
 import com.prm.project.service.BookingService;
 import com.prm.project.service.DoctorService;
+import com.prm.project.service.RateService;
 
 @Controller
 public class BaseController {
@@ -32,6 +33,9 @@ public class BaseController {
 	
 	@Autowired
 	private BookingRepository bookingRepository;
+	
+	@Autowired
+	private RateService rateService;
 	
     @RequestMapping("/home")
     public String welcome(Model model) {
@@ -87,5 +91,17 @@ public class BaseController {
     	}
     	model.addAttribute("LIST_CUSTOMER", booking);
     	return "appointment";
+    }
+    
+    @RequestMapping("/history")
+    public String history(Model model) {
+    	return "history_appointment";
+    }
+    
+    @RequestMapping("/rating")
+    public String rating(Model model) {
+    	List<RateDTO> rate = rateService.getAllRating();
+    	model.addAttribute("LIST_RATE", rate);
+    	return "rating";
     }
 }

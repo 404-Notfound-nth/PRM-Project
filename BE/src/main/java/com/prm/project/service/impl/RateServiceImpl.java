@@ -47,6 +47,15 @@ public class RateServiceImpl implements RateService{
 		return listRateDTO;
 	}
 
+	@Override
+	public List<RateDTO> getAllRating() {
+		// TODO Auto-generated method stub
+		List<Rate> rate = rateRepository.findAll();
+		List<RateDTO> rateDTO = modelMapper.map(rate, new TypeToken<List<RateDTO>>() {}.getType());
+		//System.err.println(rateDTO);
+		return rateDTO;
+	}
+
 	
 
 }

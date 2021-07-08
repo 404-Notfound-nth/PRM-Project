@@ -7,4 +7,5 @@ import com.prm.project.dto.RateDTO;
 public interface RateService {
 	void rateDoctor(RateDTO rateDTO);
 	List<RateDTO> getRateByDoctor(String doctorID);
+	List<RateDTO> getAllRating();
 }

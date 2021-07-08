@@ -1,4 +1,5 @@
-import 'package:clinicbookingapp/views/home/home.dart';
+import 'package:clinicbookingapp/views/global/main-tab-bar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,7 @@ class AccountProvider extends StatelessWidget {
 
     return Provider<Account>(
       create: (_) => accountData,
-      child: Home(),
+      child: MainTabBar(),
     );
   }
 }

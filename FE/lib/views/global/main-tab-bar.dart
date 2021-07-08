@@ -1,3 +1,4 @@
+import 'package:clinicbookingapp/views/list%20dental/list_view_dental.dart';
 import 'package:clinicbookingapp/views/reserve/stepper_reserve.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,9 @@ class _MainTabBarState extends State<MainTabBar> {
 //            icon: Icon(Icons.calendar_today),
 //          ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.more_horiz),
           ),
         ],
@@ -38,7 +42,12 @@ class _MainTabBarState extends State<MainTabBar> {
         } else if (index == 1) {
           return CupertinoTabView(
             navigatorKey: secondTabNavKey,
-            builder: (BuildContext context) => ProfilePage(),
+            builder: (BuildContext context) => DentalList(
+              dental: [
+                new Dental('Nha khoa Tâm Như', '200/1 Nguyễn Trọng Tuyển', 5),
+                new Dental('nha khoa Kim', '211/41 Hoàng Văn Thụ', 5),
+              ],
+            ),
           );
           //return CupertinoTabView(navigatorKey: secondTabNavKey, builder: (BuildContext context) => SchedulePage(),);
 //          return CupertinoTabView(

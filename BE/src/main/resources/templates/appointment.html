@@ -124,16 +124,16 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                     <i class="fas fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="#"><i class="fa fa-user-circle" aria-hidden="true"></i> QUẢN LÝ BÁC SĨ</a>
+                <a class="navbar-brand" href="#"><i class="fa fa-user-circle" aria-hidden="true"></i> QUẢN LÝ KHÁCH HÀNG</a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="active"><a href="#home" data-toggle="tooltip" data-placement="bottom"
                             title="Bác sĩ">BÁC SĨ</a></li>
                     <li><a th:href="@{/appointment}" data-toggle="tooltip" data-placement="bottom" title="LỊCH HẸN">LỊCH HẸN</a></li>
-                    <li><a href="#rateClinic" data-toggle="tooltip" data-placement="bottom" title="LỊCH CÔNG TÁC">ĐÁNH GIÁ VỀ NHA KHOA</a>
+                    <li><a th:href="@{/rating}" data-toggle="tooltip" data-placement="bottom" title="LỊCH CÔNG TÁC">ĐÁNH GIÁ VỀ NHA KHOA</a>
                     </li>
-                    <li><a href="" data-toggle="tooltip" data-placement="bottom" title="ĐÁNH GIÁ VỀ BÁC SĨ">ĐÁNH GIÁ VỀ BÁC SĨ</a>
+                    <li><a th:href="@{/history}" data-toggle="tooltip" data-placement="bottom" title="ĐÁNH GIÁ VỀ BÁC SĨ">XEM LỊCH SỬ KHÁCH HÀNG</a>
                     </li>
                     <li>
                         <a href="#" data-toggle="tooltip" data-placement="bottom" title="TÀI KHOẢN"><b>Tài Khoản</b>
@@ -154,20 +154,20 @@
     <div class="container-fluid al">
         <div id="clock"></div>
         <Br>
-        <p class="timkiemnhanvien"><b>TÌM KIẾM BÁC SĨ:</b></p><Br><Br>
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Nhập tên bác sĩ...">
+        <p class="timkiemnhanvien"><b>TÌM KIẾM KHÁCH HÀNG:</b></p><Br><Br>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Nhập số điện thoại...">
         <i class="fa fa-search" aria-hidden="true"></i>
         <form action="">
         </form>
-        <b>CHỨC NĂNG CHÍNH:</b><Br>
-        <button class="nv btn add-new" type="button" data-toggle="tooltip" data-placement="top"
+<!--         <b>CHỨC NĂNG CHÍNH:</b><Br> -->
+<!--         <button class="nv btn add-new" type="button" data-toggle="tooltip" data-placement="top"
             title="Thêm Nhân Viên"><i class="fas fa-user-plus"></i></button>
         <button class="nv" type="button" onclick="sortTable()" data-toggle="tooltip" data-placement="bottom"
-            title="Lọc Dữ Liệu"><i class="fa fa-filter" aria-hidden="true"></i></button>
-        <div class="table-title">
+            title="Lọc Dữ Liệu"><i class="fa fa-filter" aria-hidden="true"></i></button> -->
+<!--         <div class="table-title">
             <div class="row">
             </div>
-        </div>
+        </div> -->
         <table class="table table-bordered" id="myTable">
             <thead>
                 <tr class="ex">
