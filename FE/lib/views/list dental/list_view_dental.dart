@@ -1,6 +1,7 @@
 import 'package:clinicbookingapp/views/reserve/stepper_reserve.dart';
 import 'package:flutter/material.dart';
 import 'package:clinicbookingapp/helpers/constants.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:geocoding/geocoding.dart';
@@ -12,6 +13,8 @@ class Dental {
   String addressDental;
   double rating;
   Dental(this.nameDental, this.addressDental, this.rating);
+
+  String get address => addressDental;
 }
 
 //Create Item Dental
@@ -29,7 +32,7 @@ class _DentalItemSate extends State<DentalItem> {
   final Dental dental;
   String address;
   _DentalItemSate(this.dental) {
-    address = dental.addressDental;
+    address = this.dental.addressDental;
   }
 
   Position _currentPosition;
@@ -39,6 +42,7 @@ class _DentalItemSate extends State<DentalItem> {
   String _placeDistance;
 
   bool isVisi = false;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -68,7 +72,7 @@ class _DentalItemSate extends State<DentalItem> {
             Text(
               dental.nameDental,
               style: TextStyle(
-                fontSize: 25,
+                fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -94,48 +98,8 @@ class _DentalItemSate extends State<DentalItem> {
             ),
             Container(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  RaisedButton(
-                    onPressed: () {
-                      calculateDistance(dental.addressDental)
-                          .then((isCalculate) {
-                        if (isCalculate == true) {
-                          setState(() {
-                            isVisi = true;
-                          });
-                        } else {
-                          setState(() {
-                            isVisi = false;
-                          });
-                        }
-                      });
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(80.0)),
-                    textColor: Colors.white,
-                    padding: const EdgeInsets.all(0),
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 40.0,
-                      width: size.width * 0.4,
-                      decoration: new BoxDecoration(
-                          //color: Colors.blue,
-                          borderRadius: BorderRadius.circular(80.0),
-                          gradient: new LinearGradient(colors: [
-                            Constants.PRIMARY_COLOR,
-                            Constants.HEAVY_BLUE
-                            // Color.fromARGB(255, 255, 136, 34),
-                            // Color.fromARGB(255, 255, 177, 41)
-                          ])),
-                      padding: const EdgeInsets.all(0),
-                      child: Text(
-                        "Hiện khoảng cách",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
                   RaisedButton(
                     onPressed: () {
                       Navigator.push(
@@ -209,11 +173,15 @@ class _DentalItemSate extends State<DentalItem> {
       double destinationLatitude = destinationPlacemark[0].latitude;
       double destinationLongitude = destinationPlacemark[0].longitude;
 
+      print(startPlacemark.toString());
+      print(destinationPlacemark.toString());
       String totalDistance = _coordinateDistance(startLatitude, startLongitude,
               destinationLatitude, destinationLongitude)
           .toStringAsFixed(2);
+      print(totalDistance);
       setState(() {
         _placeDistance = totalDistance;
+        print(_placeDistance);
       });
       return true;
     } catch (e) {
@@ -289,11 +257,11 @@ class _DentalListState extends State<DentalList> {
   SearchBar searchBar;
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: searchBar.build(context),
       body: SingleChildScrollView(
         child: Container(
-          height: Size.infinite.height,
           child: Column(
             children: [
               Container(
@@ -308,7 +276,7 @@ class _DentalListState extends State<DentalList> {
                         ),
                       ),
                       SizedBox(
-                        height: 50,
+                        height: 400,
                       ),
                     ],
                   ),
