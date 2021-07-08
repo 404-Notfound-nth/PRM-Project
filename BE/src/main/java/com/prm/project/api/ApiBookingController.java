@@ -3,6 +3,8 @@ package com.prm.project.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +44,7 @@ public class ApiBookingController {
 //		}
 //	}
 	
+	@GetMapping("")
 	public ResponseEntity<Object> booking(@RequestBody BookingDTO bookingDTO){
 		try {
 			bookingService.booking(bookingDTO);
@@ -69,6 +72,17 @@ public class ApiBookingController {
 			return new ResponseEntity<Object>("OK", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping("/{accountphone}")
+	public ResponseEntity<Object> getBooking(@PathVariable("accountphone") String accountPhone){
+		try {
+			BookingDTO bookingDTO = bookingService.getBooking(accountPhone);
+			return new ResponseEntity<Object>(bookingDTO,HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
 }

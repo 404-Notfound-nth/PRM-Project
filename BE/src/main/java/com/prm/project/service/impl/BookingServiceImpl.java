@@ -110,5 +110,14 @@ public class BookingServiceImpl implements BookingService{
 	}
 
 
+	@Override
+	public BookingDTO getBooking(String phone) {
+		// TODO Auto-generated method stub
+		Booking booking = bookingRepository.findByAccountPhone(phone);
+		BookingDTO bookingDTO = modelMapper.map(booking, BookingDTO.class);
+		return bookingDTO;
+	}
+
+
 
 }

@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }),
     );
     if (response.statusCode == 200) {
-      jsonData = jsonDecode(response.body);
+      jsonData = json.decode(utf8.decode(response.bodyBytes));
       // print(jsonData['username']);
       // print(jsonData);
       setState(() {

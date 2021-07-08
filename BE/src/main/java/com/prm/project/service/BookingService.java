@@ -18,4 +18,6 @@ public interface BookingService {
 	void denyCustomer(String phone);
 	
 	List<BookingDTO> getListBooking();
+	
+	BookingDTO getBooking(String phone);
 }
