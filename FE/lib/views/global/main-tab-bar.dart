@@ -1,5 +1,4 @@
 import 'package:clinicbookingapp/views/list%20dental/list_view_dental.dart';
-import 'package:clinicbookingapp/views/reserve/stepper_reserve.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clinicbookingapp/views/profile/profile-page.dart';
