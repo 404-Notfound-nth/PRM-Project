@@ -1,3 +1,4 @@
+import 'package:clinicbookingapp/views/reserve/stepper_reserve.dart';
 import 'package:flutter/material.dart';
 import 'package:clinicbookingapp/helpers/constants.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -38,20 +39,18 @@ class _DentalItemSate extends State<DentalItem>{
 
   bool isVisi = false;
 
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
+    return Container(
       child: Column(
-       children: [
-         Container(
-           child: buildRounderCard(context, size),
-           height: 200,
-           width: 400,
-         ),
-
-       ],
+      children: [
+        Container(
+            child: buildRounderCard(context, size),
+            height: 200,
+            width: 400,
+          ),
+        ],
       ),
     );
   }
@@ -82,41 +81,80 @@ class _DentalItemSate extends State<DentalItem>{
               SizedBox(height: 4,),
               _cardRating(dental.rating),
               SizedBox(height: 4,),
-              RaisedButton(
-                onPressed: () {
-                  calculateDistance(dental.addressDental).then((isCalculate){
-                    if(isCalculate == true) {setState(() {
-                      isVisi = true;
-                    });} else {
-                      setState(() {
-                        isVisi = false;
-                      });
-                    }
-                  });
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(80.0)),
-                textColor: Colors.white,
-                padding: const EdgeInsets.all(0),
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 40.0,
-                  width: size.width * 0.5,
-                  decoration: new BoxDecoration(
-                    //color: Colors.blue,
-                      borderRadius: BorderRadius.circular(80.0),
-                      gradient: new LinearGradient(colors: [
-                        Constants.PRIMARY_COLOR,
-                        Constants.HEAVY_BLUE
-                        // Color.fromARGB(255, 255, 136, 34),
-                        // Color.fromARGB(255, 255, 177, 41)
-                      ])),
-                  padding: const EdgeInsets.all(0),
-                  child: Text(
-                    "Hiện khoảng cách",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    RaisedButton(
+                      onPressed: () {
+                        calculateDistance(dental.addressDental).then((isCalculate){
+                          if(isCalculate == true) {setState(() {
+                            isVisi = true;
+                          });} else {
+                            setState(() {
+                              isVisi = false;
+                            });
+                          }
+                        });
+                      },
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(80.0)),
+                      textColor: Colors.white,
+                      padding: const EdgeInsets.all(0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 40.0,
+                        width: size.width*0.4,
+                        decoration: new BoxDecoration(
+                          //color: Colors.blue,
+                            borderRadius: BorderRadius.circular(80.0),
+                            gradient: new LinearGradient(colors: [
+                              Constants.PRIMARY_COLOR,
+                              Constants.HEAVY_BLUE
+                              // Color.fromARGB(255, 255, 136, 34),
+                              // Color.fromARGB(255, 255, 177, 41)
+                            ])),
+                        padding: const EdgeInsets.all(0),
+                        child: Text(
+                          "Hiện khoảng cách",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => StepperReserve()),
+                        );
+                      },
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(80.0)),
+                      textColor: Colors.white,
+                      padding: const EdgeInsets.all(0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 40.0,
+                        width: size.width*0.4,
+                        decoration: new BoxDecoration(
+                          //color: Colors.blue,
+                            borderRadius: BorderRadius.circular(80.0),
+                            gradient: new LinearGradient(colors: [
+                              Constants.PRIMARY_COLOR,
+                              Constants.HEAVY_BLUE
+                              // Color.fromARGB(255, 255, 136, 34),
+                              // Color.fromARGB(255, 255, 177, 41)
+                            ])),
+                        padding: const EdgeInsets.all(0),
+                        child: Text(
+                          "Chi Tiết",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -141,7 +179,6 @@ class _DentalItemSate extends State<DentalItem>{
       onRatingUpdate: null,
     );
   }
-
 
   //==> phương thức tính toán là _calculateDistance á
   // Method for calculating the distance between two places

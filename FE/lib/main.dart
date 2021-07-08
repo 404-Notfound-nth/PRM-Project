@@ -35,12 +35,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: new CupertinoApp(
-        home: //LoginScreen(),
-        DentalList(dental: [
-            new Dental('Nha khoa Tâm Như', '200/1 Nguyễn Trọng Tuyển', 5),
-          new Dental('nha khoa Kim', '211/41 Hoàng Văn Thụ', 5)
-          ],
-        ),
+        home: LoginScreen(),
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
           DefaultMaterialLocalizations.delegate,
           DefaultWidgetsLocalizations.delegate,
