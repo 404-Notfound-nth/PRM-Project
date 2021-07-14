@@ -16,7 +16,7 @@ class AccountProvider extends StatelessWidget {
 
     return Provider<Account>(
       create: (_) => accountData,
-      child: MainTabBar(),
+      child: MainTabBar(phone: accountData.phone),
     );
   }
 }

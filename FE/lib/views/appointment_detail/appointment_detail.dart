@@ -1,6 +1,12 @@
 import 'package:clinicbookingapp/helpers/constants.dart';
-import 'package:clinicbookingapp/views/reserve/stepper_reserve.dart';
+import 'package:clinicbookingapp/views/home/home.dart';
+import 'package:clinicbookingapp/views/provider/Account.dart';
+import 'package:clinicbookingapp/views/provider/Booking.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:provider/provider.dart';
 
 //Create Class Appointment
 class Appointment {
@@ -17,10 +23,23 @@ class Appointment {
 
 class AppoinmentDetailScreen extends StatefulWidget {
   final Appointment appointment;
+  final String phone;
+  final String bookingID;
+  //final String notify;
 
-  AppoinmentDetailScreen(Appointment appointment)
-      : appointment = appointment,
-        super(key: new ObjectKey(appointment));
+  // AppoinmentDetailScreen(Appointment appointment, String bookingID)
+  //     : appointment = appointment,
+  //       bookingID = bookingID,
+  //       super(key: new ObjectKey(appointment));
+
+  AppoinmentDetailScreen(
+      {Key key,
+      @required this.appointment,
+      @required this.bookingID,
+      @required this.phone})
+      : super(key: key);
+
+  // AppoinmentDetailScreen({Key key, @required this.notify}) : super(key: key);
 
   @override
   _AppoinmentDetailScreenState createState() =>
@@ -29,13 +48,39 @@ class AppoinmentDetailScreen extends StatefulWidget {
 
 class _AppoinmentDetailScreenState extends State<AppoinmentDetailScreen> {
   final Appointment appointment;
-  Reason _reason = Reason.onBussiness;
+
+  Reason _reason;
 
   _AppoinmentDetailScreenState(this.appointment);
+
+  // cancelBooking(String reason) async {
+  //   var url = Uri.parse(
+  //       'https://localhost:8080/api/booking/cancel/${booking.id}/${reason}');
+  //   print(url);
+  //   try {
+  //     var response =
+  //         await http.get(url, headers: {'Content-Type': 'application/json'});
+  //     print(response.statusCode);
+  //     if (response.statusCode == 200) {
+  //       //var ser = json.decode(utf8.decode(response.bodyBytes));
+  //       setState(() {});
+  //     }
+  //   } catch (error) {
+  //     throw (error);
+  //   }
+  // }
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   cancelBooking();
+  // }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -145,6 +190,7 @@ class _AppoinmentDetailScreenState extends State<AppoinmentDetailScreen> {
                   margin: const EdgeInsets.only(left: 5, top: 30),
                   child: Text(
                     'Địa chỉ: ',
+                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -210,29 +256,29 @@ class _AppoinmentDetailScreenState extends State<AppoinmentDetailScreen> {
                 SizedBox(
                   width: 20,
                 ),
-                FlatButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => StepperReserve()));
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.black)),
-                    child: Container(
-                      child: Row(
-                        children: [
-                          Text("Đổi lịch hẹn"),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Icon(Icons.date_range_outlined),
-                        ],
-                      ),
-                    )),
+                // FlatButton(
+                //     onPressed: () {
+                //       Navigator.push(
+                //           context,
+                //           MaterialPageRoute(
+                //               builder: (context) => StepperReserve()));
+                //     },
+                //     shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(20),
+                //         side: BorderSide(color: Colors.black)),
+                //     child: Container(
+                //       child: Row(
+                //         children: [
+                //           Text("Đổi lịch hẹn"),
+                //           SizedBox(
+                //             width: 10,
+                //           ),
+                //           Icon(Icons.date_range_outlined),
+                //         ],
+                //       ),
+                //     )),
                 SizedBox(
-                  width: 70,
+                  width: 100,
                 ),
                 FlatButton(
                     onPressed: () {
@@ -247,7 +293,10 @@ class _AppoinmentDetailScreenState extends State<AppoinmentDetailScreen> {
                                 children: [
                                   Container(
                                     width: double.infinity,
-                                    child: ReasonRadio(),
+                                    child: ReasonRadio(
+                                      bookingID: widget.bookingID,
+                                      phone: widget.phone,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -275,10 +324,13 @@ class _AppoinmentDetailScreenState extends State<AppoinmentDetailScreen> {
   }
 }
 
-enum Reason { onBussiness, wrongDay, orther, wrongService }
+enum Reason { onBussiness, wrongDay, other, wrongService }
 
 class ReasonRadio extends StatefulWidget {
-  ReasonRadio({Key key}) : super(key: key);
+  final String bookingID;
+  final String phone;
+  ReasonRadio({Key key, @required this.bookingID, @required this.phone})
+      : super(key: key);
 
   @override
   _ReasonRadioState createState() => _ReasonRadioState();
@@ -286,9 +338,42 @@ class ReasonRadio extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _ReasonRadioState extends State<ReasonRadio> {
+  TextEditingController otherController = TextEditingController();
   Reason _character = Reason.onBussiness;
-
+  String notify = "";
   bool isVisible = false;
+  Booking booking;
+
+  cancelBooking(String reason) async {
+    //Account account = Provider.of<Account>(context);
+    print(widget.bookingID);
+    print(widget.phone);
+    // print("+++++++++++" + booking.id);
+    var url = Uri.parse(
+        // ignore: unnecessary_brace_in_string_interps
+        'https://localhost:8080/api/booking/cancel/${widget.bookingID}/${reason}');
+    print(url);
+    try {
+      var response =
+          await http.put(url, headers: {'Content-Type': 'application/json'});
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        // var book = json.decode(utf8.decode(response.bodyBytes));
+        setState(() {
+          Navigator.pop(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Home(
+                        phone: widget.phone,
+                        notify: "Bạn đã hủy lịch thành công",
+                      )));
+          notify = "Bạn đã hủy lịch thành công";
+        });
+      }
+    } catch (error) {
+      throw (error);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +390,7 @@ class _ReasonRadioState extends State<ReasonRadio> {
               setState(() {
                 _character = value;
               });
-              if (value != Reason.orther) {
+              if (value != Reason.other) {
                 setState(() {
                   isVisible = false;
                 });
@@ -320,7 +405,7 @@ class _ReasonRadioState extends State<ReasonRadio> {
               setState(() {
                 _character = value;
               });
-              if (value != Reason.orther) {
+              if (value != Reason.other) {
                 setState(() {
                   isVisible = false;
                 });
@@ -334,7 +419,7 @@ class _ReasonRadioState extends State<ReasonRadio> {
             onChanged: (Reason value) {
               setState(() {
                 _character = value;
-                if (value != Reason.orther) {
+                if (value != Reason.other) {
                   setState(() {
                     isVisible = false;
                   });
@@ -344,13 +429,13 @@ class _ReasonRadioState extends State<ReasonRadio> {
           ),
           RadioListTile<Reason>(
             title: const Text('Khác'),
-            value: Reason.orther,
+            value: Reason.other,
             groupValue: _character,
             onChanged: (Reason value) {
               setState(() {
                 _character = value;
               });
-              if (value == Reason.orther) {
+              if (value == Reason.other) {
                 setState(() {
                   isVisible = true;
                 });
@@ -367,10 +452,11 @@ class _ReasonRadioState extends State<ReasonRadio> {
           Visibility(
             visible: isVisible,
             child: TextFormField(
+              controller: otherController,
               maxLines: 3,
               decoration: InputDecoration(
-                  border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5)),
                   hintText: 'Xin bạn vui lòng cho biết lí do sau:'),
             ),
           ),
@@ -413,7 +499,23 @@ class _ReasonRadioState extends State<ReasonRadio> {
                 width: 30,
               ),
               RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  switch (_character) {
+                    case Reason.onBussiness:
+                      cancelBooking("Bận công việc riêng");
+                      break;
+                    case Reason.wrongDay:
+                      cancelBooking("Đặt nhầm ngày");
+                      break;
+                    case Reason.wrongService:
+                      cancelBooking("Đặt nhầm dịch vụ");
+                      break;
+                    case Reason.other:
+                      cancelBooking(otherController.text);
+                      break;
+                    default:
+                  }
+                },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(80.0)),
                 textColor: Colors.white,

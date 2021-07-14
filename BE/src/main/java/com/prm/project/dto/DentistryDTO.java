@@ -28,4 +28,6 @@ public class DentistryDTO implements Serializable {
 	private String image;
 
 	private String email;
+	
+
 }

@@ -32,7 +32,7 @@ public class Service {
 	private String serviceName;
 	
 	@Column(name = "price")
-	private Long price;
+	private int price;
 	
 	@OneToMany(mappedBy = "service", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Booking> booking;

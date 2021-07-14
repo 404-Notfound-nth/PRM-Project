@@ -1,19 +1,156 @@
 import 'package:clinicbookingapp/views/appointment_detail/appointment_detail.dart';
+import 'package:clinicbookingapp/views/provider/Account.dart';
+import 'package:clinicbookingapp/views/provider/Booking.dart';
+import 'package:clinicbookingapp/views/provider/Dentistry.dart';
+import 'package:clinicbookingapp/views/provider/Service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clinicbookingapp/helpers/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class NextAppointmentCard extends StatelessWidget {
+class NextAppointmentCard extends StatefulWidget {
+  final String phone;
+
+  const NextAppointmentCard({Key key, @required this.phone}) : super(key: key);
+  @override
+  NextAppointmentCardScreen createState() => NextAppointmentCardScreen();
+}
+
+class NextAppointmentCardScreen extends State<NextAppointmentCard> {
+  Booking booking;
+  List<Service> listService = [];
+  Service service;
+  Dentistry dentistry;
+
+  getBooking() async {
+    var url = Uri.parse(
+        "https://localhost:8080/api/booking/get-booking/${widget.phone}");
+    print(url);
+    try {
+      // var response =
+      //     await http.get(url, headers: {'Content-Type': 'application/json'});
+      var res =
+          await http.get(url, headers: {'Content-Type': 'application/json'});
+      print("BOOKING");
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        var data = json.decode(utf8.decode(res.bodyBytes));
+        setState(() {
+          booking = new Booking.fromJson(data);
+          if (booking.statusId == 'ACCEPT') {
+            booking.statusId = 'Chấp nhận';
+          }
+
+          if (booking.statusId == 'DENY') {
+            booking.statusId = 'Từ chối';
+          }
+
+          if (booking.statusId == 'WATTING') {
+            booking.statusId = 'Chờ phản hồi';
+          }
+
+          if (booking.statusId == 'CANCEL') {
+            booking.statusId = 'Hủy lịch hẹn';
+          }
+
+          getService();
+          getDentistry();
+        });
+      }
+    } catch (e) {
+      e.toString();
+    }
+  }
+
+  getDentistry() async {
+    var url = Uri.parse(
+        'https://localhost:8080/api/dentistry/${booking.dentistryAddress}');
+    print(url);
+    try {
+      // var response =
+      //     await http.get(url, headers: {'Content-Type': 'application/json'});
+      var res =
+          await http.get(url, headers: {'Content-Type': 'application/json'});
+
+      if (res.statusCode == 200) {
+        var den = json.decode(utf8.decode(res.bodyBytes));
+        setState(() {
+          dentistry = new Dentistry.fromJson(den);
+        });
+      }
+    } catch (error) {
+      throw (error);
+    }
+  }
+  // getListService() async {
+  //   var url = Uri.parse('https://localhost:8080/api/service');
+
+  //   ///${booking.serviceId}
+  //   try {
+  //     var response =
+  //         await http.get(url, headers: {'Content-Type': 'application/json'});
+  //     if (response.statusCode == 200) {
+  //       var ser = json.decode(utf8.decode(response.bodyBytes));
+  //       setState(() {
+  //         for (var u in ser) {
+  //           Service service = new Service.fromJson(u);
+  //           // print(service);
+  //           listService.add(service);
+  //         }
+  //         for (var u in listService) {
+  //           print("-------------------" + u.serviceName);
+  //         }
+  //       });
+  //     }
+  //   } catch (error) {
+  //     throw (error);
+  //   }
+  // }
+
+  getService() async {
+    var url =
+        Uri.parse('https://localhost:8080/api/service/${booking.serviceId}');
+    print(url);
+    try {
+      // var response =
+      //     await http.get(url, headers: {'Content-Type': 'application/json'});
+      var res =
+          await http.get(url, headers: {'Content-Type': 'application/json'});
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        var ser = json.decode(utf8.decode(res.bodyBytes));
+        setState(() {
+          service = new Service.fromJson(ser);
+        });
+      }
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getBooking();
+    //getListService();
+    // getService();
+  }
+
   @override
   Widget build(BuildContext context) {
+    Account account = Provider.of<Account>(context);
+    Booking bookingID;
     var sampleAppointment = new Appointment(
-      "Huy",
-      "099125423",
-      "Nha khoa Thủ Đức",
-      "123 Phạm Văn Đồng, phường TCH, quận Thủ Đức",
-      "20/7/2021 - 18:00",
-      "Bọc răng sứ",
+      account.fullname,
+      account.phone,
+      dentistry.name,
+      dentistry.address,
+      DateFormat("dd/MM/yyyy").format(booking.date) + " - " + booking.time,
+      service.serviceName,
     );
     return Container(
       decoration: BoxDecoration(
@@ -54,17 +191,26 @@ class NextAppointmentCard extends StatelessWidget {
             ),
 
             // location of clinic
-            Text("\u2022 Địa chỉ: 123 Phạm Văn Đồng, phường TCH, quận Thủ Đức"),
+            Text("\u2022" + " " + dentistry.name + "  -  " + dentistry.address),
             SizedBox(
               height: 8,
             ),
             // time of the next appointment
-            Text("\u2022 Thời gian: 20/7/2021 - 18:00"),
+            Text("\u2022" +
+                DateFormat("dd/MM/yyyy").format(booking.date) +
+                " - " +
+                booking.time),
             SizedBox(
               height: 8,
             ),
             // dentist info
             Text("\u2022 Nha sĩ: Chúng tôi sẽ sắp xếp cho bạn nha sĩ tốt nhất"),
+
+            SizedBox(
+              height: 8,
+            ),
+            // dentist info
+            Text("\u2022 Tình trạng: " + booking.statusId),
             SizedBox(
               height: 8,
             ),
@@ -86,8 +232,11 @@ class NextAppointmentCard extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              AppoinmentDetailScreen(sampleAppointment)))
+                          builder: (context) => AppoinmentDetailScreen(
+                                appointment: sampleAppointment,
+                                bookingID: booking.id,
+                                phone: widget.phone,
+                              )))
                 },
                 child: Text(
                   "Xem chi tiết lịch hẹn",

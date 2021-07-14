@@ -88,10 +88,12 @@ class _LoginScreenState extends State<LoginScreen> {
         'password': password,
       }),
     );
+    print(response.body);
     if (response.statusCode == 200) {
       jsonData = json.decode(utf8.decode(response.bodyBytes));
       // print(jsonData['username']);
-      // print(jsonData);
+      print(jsonData.toString());
+      print(jsonData);
       setState(() {
         // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => HomePage(username: username)), (route) => false);
         Navigator.pushAndRemoveUntil(

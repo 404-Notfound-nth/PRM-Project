@@ -1,4 +1,4 @@
-import 'package:clinicbookingapp/views/reserve/stepper_reserve.dart';
+import 'package:clinicbookingapp/views/reserve/reserve.dart';
 import 'package:flutter/material.dart';
 import 'package:clinicbookingapp/helpers/constants.dart';
 import 'package:flutter/widgets.dart';
@@ -105,7 +105,7 @@ class _DentalItemSate extends State<DentalItem> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => StepperReserve()),
+                            builder: (context) => ReserveScreen()),
                       );
                     },
                     shape: RoundedRectangleBorder(
@@ -173,15 +173,15 @@ class _DentalItemSate extends State<DentalItem> {
       double destinationLatitude = destinationPlacemark[0].latitude;
       double destinationLongitude = destinationPlacemark[0].longitude;
 
-      print(startPlacemark.toString());
-      print(destinationPlacemark.toString());
+//      print(startPlacemark.toString());
+      // print(destinationPlacemark.toString());
       String totalDistance = _coordinateDistance(startLatitude, startLongitude,
               destinationLatitude, destinationLongitude)
           .toStringAsFixed(2);
-      print(totalDistance);
+      // print(totalDistance);
       setState(() {
         _placeDistance = totalDistance;
-        print(_placeDistance);
+        //  print(_placeDistance);
       });
       return true;
     } catch (e) {
@@ -206,7 +206,7 @@ class _DentalItemSate extends State<DentalItem> {
         .then((Position position) async {
       setState(() {
         _currentPosition = position;
-        print('CURRENT POS: $_currentPosition');
+        //print('CURRENT POS: $_currentPosition');
       });
       await _getAddress();
     }).catchError((e) {
@@ -236,7 +236,7 @@ class _DentalItemSate extends State<DentalItem> {
   void initState() {
     super.initState();
     asyncMethod();
-    print(address);
+    // print(address);
   }
 
   void asyncMethod() async {

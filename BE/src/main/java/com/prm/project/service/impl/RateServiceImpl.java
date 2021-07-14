@@ -1,7 +1,6 @@
 package com.prm.project.service.impl;
 
 import java.util.List;
-
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
@@ -9,6 +8,8 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.prm.project.dto.AccountDTO;
+import com.prm.project.dto.DoctorsDTO;
 import com.prm.project.dto.RateDTO;
 import com.prm.project.entity.Rate;
 import com.prm.project.repository.RateRepository;
@@ -27,11 +28,12 @@ public class RateServiceImpl implements RateService{
 	public void rateDoctor(RateDTO rateDTO) {
 		// TODO Auto-generated method stub
 		Rate entity = null;
-		
+		DoctorsDTO doctor = new DoctorsDTO();
+		AccountDTO account = new AccountDTO();
 		rateDTO.setId(UUID.randomUUID().toString());
 		rateDTO.setDoctorNumberRating(rateDTO.getDoctorNumberRating());
-		rateDTO.setDoctor_id(rateDTO.getDoctor_id());
-		rateDTO.setAccount_id(rateDTO.getAccount_id());
+		rateDTO.setDoctor(doctor);
+		rateDTO.setAccount(account);
 		
 		entity = modelMapper.map(rateDTO, Rate.class);
 		rateRepository.save(entity);

@@ -119,5 +119,23 @@ public class BookingServiceImpl implements BookingService{
 	}
 
 
+	@Override
+	public void cancelBooking(String booking_id, String note) {
+		// TODO Auto-generated method stub
+		Booking booking = bookingRepository.findById(booking_id).get();
+		long millis=System.currentTimeMillis();   
+		java.util.Date date=new java.util.Date(millis);
+		if(booking !=null) {
+			booking.setStatus_id(CANCEL_STATUS);
+			booking.setNote(note);
+			booking.setModifiedDate(date);
+			
+			bookingRepository.save(booking);
+		}
+	}
+
+
+
+
 
 }

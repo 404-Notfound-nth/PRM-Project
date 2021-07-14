@@ -1,5 +1,7 @@
 package com.prm.project.entity;
 
+import java.sql.Time;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -34,7 +36,7 @@ public class Booking {
 	private Date createDate;
 	private Date modifiedDate;
 	
-	@Column(name = "note", columnDefinition = "text")
+	@Column(name = "note", columnDefinition = "nvarchar(255)")
 	private String note;
 	
 	@Column(name = "status_id")
@@ -47,12 +49,19 @@ public class Booking {
 	@Column(name = "service_id", columnDefinition = "uniqueidentifier")
 	private String service_id;
 	
+	private Time time;
+	
+	@Column(name = "date", columnDefinition = "date")
+	private Date date;
+	
+	@Column(columnDefinition = "nvarchar(255)")
+	private String dentistry_address;
+	
 	@ManyToOne
 	@JsonIgnore
 	@JoinColumn(name = "account_phone", insertable = false, updatable = false)
 	private Account account;
 	
-
 	@ManyToOne
 	@JsonIgnore
 	@JoinColumn(name = "status_id", insertable = false, updatable = false)
@@ -62,6 +71,11 @@ public class Booking {
 	@JsonIgnore
 	@JoinColumn(name = "service_id",insertable = false, updatable = false)
 	private Service service;
+	
+	@ManyToOne
+	@JsonIgnore
+	@JoinColumn(name = "dentistry_address", insertable = false, updatable = false)
+	private Dentistry dentistry;
 	
 	@OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Bill> bill;

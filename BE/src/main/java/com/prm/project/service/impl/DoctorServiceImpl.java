@@ -25,7 +25,7 @@ public class DoctorServiceImpl implements DoctorService{
 	@Override
 	public List<DoctorsDTO> getListDoctorByStatus() {
 		// TODO Auto-generated method stub
-		List<Doctors> doctor = doctorRepository.findByStatus(NOT_BOOKING_STATUS);
+		List<Doctors> doctor = doctorRepository.findByStatusId(NOT_BOOKING_STATUS);
 		List<DoctorsDTO> doctorDTO = modelmapper.map(doctor, new TypeToken<List<DoctorsDTO>>(){}.getType());
 		return doctorDTO;
 	}

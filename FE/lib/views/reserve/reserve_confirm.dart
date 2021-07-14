@@ -6,7 +6,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 class InfomationDetailScreen extends StatefulWidget {
   String name, phone, address, note;
   InfomationDetailScreen(
-      {Key key, this.name, this.address, this.phone, this.note})
+      {Key key,
+      this.name,
+      this.address,
+      this.phone,
+      this.note,
+      String strTime,
+      String strDate})
       : super(key: key);
   @override
   _InfomationDetailScreenState createState() => _InfomationDetailScreenState();

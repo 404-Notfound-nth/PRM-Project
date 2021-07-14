@@ -1,14 +1,16 @@
-import 'package:clinicbookingapp/views/list%20dental/list_view_dental.dart';
-import 'package:clinicbookingapp/views/reserve/stepper_reserve.dart';
+import 'package:clinicbookingapp/views/provider/Account.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clinicbookingapp/views/profile/profile-page.dart';
+import 'package:provider/provider.dart';
 //import 'package:clinicbookingapp/views/schedule/schedule-page.dart';
 
 import '../home/home.dart';
 import '../../main.dart';
 
 class MainTabBar extends StatefulWidget {
+  final String phone;
+  const MainTabBar({Key key, @required this.phone}) : super(key: key);
   @override
   _MainTabBarState createState() => _MainTabBarState();
 }
@@ -16,6 +18,8 @@ class MainTabBar extends StatefulWidget {
 class _MainTabBarState extends State<MainTabBar> {
   @override
   Widget build(BuildContext context) {
+    Account account = Provider.of<Account>(context);
+
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: [
@@ -37,7 +41,7 @@ class _MainTabBarState extends State<MainTabBar> {
         if (index == 0) {
           return CupertinoTabView(
             navigatorKey: firstTabNavKey,
-            builder: (BuildContext context) => Home(),
+            builder: (BuildContext context) => Home(phone: account.phone),
           );
         } else if (index == 1) {
           return CupertinoTabView(

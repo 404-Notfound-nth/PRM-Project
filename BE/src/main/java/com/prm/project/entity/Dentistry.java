@@ -38,5 +38,7 @@ public class Dentistry {
 	@Column(name = "email")
 	private String email;
 	
-	
+//	@OneToMany(mappedBy = "dentistry", fetch = FetchType.LAZY)
+//	private List<Booking> booking;
+//	
 }

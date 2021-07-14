@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:clinicbookingapp/views/provider/Account.dart';
 import 'package:clinicbookingapp/views/list dental/list_view_dental.dart';
-import 'package:clinicbookingapp/views/provider/DentalClinic.dart';
+import 'package:clinicbookingapp/views/provider/Dentistry.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:clinicbookingapp/views/home/next-appointment-card.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -15,13 +16,18 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
+  final String phone;
+  final String notify;
+  const Home({Key key, @required this.phone, this.notify}) : super(key: key);
+
   @override
   HomeScreen createState() => HomeScreen();
 }
 
 class HomeScreen extends State<Home> {
   List<Dentistry> listDentistry = [];
-  List<Map<String, dynamic>> listDentail = [
+
+  List<Map<String, dynamic>> listDental = [
     {
       'name': 'Nha Khoa Tâm Như',
       'address': '200/1 Nguyễn Trọng Tuyển',
@@ -33,6 +39,20 @@ class HomeScreen extends State<Home> {
       'rating': 5,
     }
   ];
+
+  List<Dentistry> parsePost(String responeBody) {
+    var list = json.decode(responeBody) as List<dynamic>;
+    var dentistry = list.map((model) => Dentistry.fromJson(model)).toList();
+    return dentistry;
+  }
+
+  Future<List<Dentistry>> fetchDentistry() async {
+    final url = Uri.parse('https://localhost:8080/api/dentistry');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return compute(parsePost, response.body);
+    }
+  }
 
   getListDentistry() async {
     var url = Uri.parse('https://localhost:8080/api/dentistry');
@@ -46,9 +66,9 @@ class HomeScreen extends State<Home> {
             Dentistry dentistry = new Dentistry.fromJson(u);
             listDentistry.add(dentistry);
           }
-          for (var u in listDentistry) {
-            print(u.address);
-          }
+          // for (var u in listDentistry) {
+          //   print(u.address);
+          // }
         });
       }
     } catch (error) {
@@ -151,7 +171,7 @@ class HomeScreen extends State<Home> {
               ),
               Container(
                 margin: EdgeInsets.only(left: 10, right: 10),
-                child: NextAppointmentCard(),
+                child: NextAppointmentCard(phone: account.phone),
               ),
               SizedBox(
                 height: 10,

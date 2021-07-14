@@ -143,7 +143,7 @@ class _ProfileState extends State<ProfileBody> {
                       borderRadius: BorderRadius.circular(15)),
                   color: Color(0xFFF5F6F9),
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pop(
                       context,
                       MaterialPageRoute(builder: (context) => LoginScreen()),
                     );

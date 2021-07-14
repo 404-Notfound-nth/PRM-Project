@@ -30,11 +30,6 @@ public class Rate {
 	@Column(name = "doctorNumberRating")
 	private Integer doctorNumberRating;
 	
-	@GenericGenerator(name = "generator", strategy = "uuid2", parameters = {})
-	@Column(name = "doctor_id", columnDefinition = "uniqueidentifier")
-	private String doctor_id;
-	
-	private String account_id;
 	
 	@ManyToOne
 	@JsonIgnore
@@ -43,7 +38,7 @@ public class Rate {
 	
 	@ManyToOne
 	@JsonIgnore
-	@JoinColumn(name = "account_id", insertable = false, updatable = false)
+	@JoinColumn(name = "account_phone", insertable = false, updatable = false)
 	private Account account;
 
 }

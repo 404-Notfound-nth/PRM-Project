@@ -38,4 +38,12 @@ public class DentistryServiceImpl implements DentistryService{
 		return listDentistryDTO;
 	}
 
+	@Override
+	public DentistryDTO getDentistry(String address) {
+		// TODO Auto-generated method stub
+		Dentistry dentistry = dentistryRepository.findById(address).get();
+		DentistryDTO dentistryDTO = modelMapper.map(dentistry, DentistryDTO.class);
+		return dentistryDTO;
+	}
+
 }

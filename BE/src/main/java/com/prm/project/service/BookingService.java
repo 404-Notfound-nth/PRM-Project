@@ -17,6 +17,8 @@ public interface BookingService {
 	
 	void denyCustomer(String phone);
 	
+	void cancelBooking(String booking_id,String note);
+	
 	List<BookingDTO> getListBooking();
 	
 	BookingDTO getBooking(String phone);
