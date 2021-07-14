@@ -1,3 +1,4 @@
+import 'package:clinicbookingapp/views/page/filter_network_list_page.dart';
 import 'package:clinicbookingapp/views/provider/Account.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,9 +46,10 @@ class _MainTabBarState extends State<MainTabBar> {
           );
         } else if (index == 1) {
           return CupertinoTabView(
-            navigatorKey: secondTabNavKey,
-            builder: (BuildContext context) => ProfilePage(),
             // navigatorKey: secondTabNavKey,
+            // builder: (BuildContext context) => ProfilePage(),
+             navigatorKey: secondTabNavKey,
+            builder: (BuildContext context) => FilterNetworkListPage(),
             // builder: (BuildContext context) => DentalList(dental: [
             //   new Dental('Nha khoa Tâm Như', '200/1 Nguyễn Trọng Tuyển', 5),
             //   new Dental('nha khoa Kim', '211/41 Hoàng Văn Thụ', 5),
